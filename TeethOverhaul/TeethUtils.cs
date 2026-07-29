@@ -172,7 +172,7 @@ namespace SimsVerse.TeethOverhaul
                 {
                     simBuilder.PrepareForOutfit(simDescription.GetOutfit(outfitCategory, outfitIndex));
                     simBuilder.RemoveParts(BodyTypes.Face);
-                    if (simDescription.IsHuman && !simDescription.IsBonehilda && !simDescription.IsMummy && !simDescription.IsRobot)
+                    if (simDescription.IsHuman && !simDescription.IsBonehilda && !simDescription.IsMummy && !simDescription.IsRobot && !(simDescription.IsImaginaryFriend && outfitCategory == OutfitCategories.Special && outfitIndex == ((Sims3.Gameplay.ActorSystems.OccultImaginaryFriend)simDescription.OccultManager.GetOccultType(Sims3.UI.Hud.OccultTypes.ImaginaryFriend)).GetSpecialOutfitIndex()))
                     {
                         simBuilder.AddPart(new ResourceKey(ResourceUtils.HashString64(simDescription.GetFacePartName()), 0x34AEECB, 0));
                     }
