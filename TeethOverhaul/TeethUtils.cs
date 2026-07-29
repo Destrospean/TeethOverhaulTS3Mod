@@ -61,10 +61,10 @@ namespace SimsVerse.TeethOverhaul
 
         public static void ApplyTeethToAllOutfits(this SimDescription simDescription, CASPart teeth)
         {
-            if (simDescription.IsHuman)
+            if (simDescription.IsHuman && !simDescription.IsBonehilda && !simDescription.IsMummy && !simDescription.IsRobot)
             {
                 SimTeethMap[simDescription] = teeth;
-                simDescription.ApplyToAllOutfits((simBuilder, outfitCategory, outfitIndex) => simDescription.ApplyTeethToOutfit(simBuilder, outfitCategory, outfitIndex, teeth));
+                simDescription.ApplyToAllOutfits((simBuilder, outfitCategory, outfitIndex) => simDescription.IsImaginaryFriend && outfitCategory == OutfitCategories.Special && outfitIndex == ((Sims3.Gameplay.ActorSystems.OccultImaginaryFriend)simDescription.OccultManager.GetOccultType(Sims3.UI.Hud.OccultTypes.ImaginaryFriend)).GetSpecialOutfitIndex() ? simDescription.GetOutfit(outfitCategory, outfitIndex) : simDescription.ApplyTeethToOutfit(simBuilder, outfitCategory, outfitIndex, teeth));
             }
         }
 
@@ -172,7 +172,7 @@ namespace SimsVerse.TeethOverhaul
                 {
                     simBuilder.PrepareForOutfit(simDescription.GetOutfit(outfitCategory, outfitIndex));
                     simBuilder.RemoveParts(BodyTypes.Face);
-                    if (simDescription.IsHuman)
+                    if (simDescription.IsHuman && !simDescription.IsBonehilda && !simDescription.IsMummy && !simDescription.IsRobot)
                     {
                         simBuilder.AddPart(new ResourceKey(ResourceUtils.HashString64(simDescription.GetFacePartName()), 0x34AEECB, 0));
                     }

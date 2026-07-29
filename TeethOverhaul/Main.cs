@@ -83,9 +83,19 @@ namespace SimsVerse.TeethOverhaul
                         });
                     foreach (SimDescription simDescription in new System.Collections.Generic.List<SimDescription>(TeethUtils.SimTeethMap.Keys))
                     {
-                        if (!simDescription.IsHuman)
+                        if (!simDescription.IsHuman || simDescription.IsBonehilda || simDescription.IsMummy || simDescription.IsRobot)
                         {
                             simDescription.ResetTeeth();
+                        }
+                        else if (simDescription.IsImaginaryFriend)
+                        {
+                            Sims3.Gameplay.ActorSystems.OccultImaginaryFriend occultImaginaryFriend = (Sims3.Gameplay.ActorSystems.OccultImaginaryFriend)simDescription.OccultManager.GetOccultType(Sims3.UI.Hud.OccultTypes.ImaginaryFriend);
+                            Sims3.SimIFace.CAS.CASPart? teeth;
+                            if (occultImaginaryFriend.GetSpecialOutfitIndex() > -1 && simDescription.GetSpecialOutfit(occultImaginaryFriend.GetSpecialOutfitKey()).TryGetTeeth(out teeth))
+                            {
+                                simDescription.ResetTeeth();
+                                simDescription.ApplyTeethToAllOutfits(teeth.Value);
+                            }
                         }
                     }
                     foreach (Sim sim in Sims3.Gameplay.Queries.GetObjects<Sim>())
