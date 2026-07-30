@@ -83,7 +83,7 @@ namespace SimsVerse.TeethOverhaul
                         });
                     foreach (SimDescription simDescription in new System.Collections.Generic.List<SimDescription>(TeethUtils.SimTeethMap.Keys))
                     {
-                        if (!simDescription.IsHuman || simDescription.IsBonehilda || simDescription.IsMummy || simDescription.IsRobot)
+                        if (!simDescription.IsHuman || simDescription.IsBonehilda || simDescription.IsMummy || simDescription.IsRobot || simDescription.IsServicePerson && simDescription.Service.ServiceType == Sims3.Gameplay.Services.ServiceType.GrimReaper)
                         {
                             simDescription.ResetTeeth();
                         }

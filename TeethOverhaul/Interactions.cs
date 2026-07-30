@@ -1,6 +1,7 @@
 ﻿using Sims3.Gameplay.Actors;
 using Sims3.Gameplay.Autonomy;
 using Sims3.Gameplay.Interactions;
+using Sims3.Gameplay.Services;
 using Sims3.Gameplay.Utilities;
 using Sims3.SimIFace;
 using Sims3.SimIFace.CAS;
@@ -36,7 +37,7 @@ namespace SimsVerse.TeethOverhaul
 
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return !Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot;
+                    return !Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && !(target.SimDescription.IsServicePerson && target.Service.ServiceType == ServiceType.GrimReaper);
                 }
             }
 
@@ -45,7 +46,7 @@ namespace SimsVerse.TeethOverhaul
             {
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot;
+                    return Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && !(target.SimDescription.IsServicePerson && target.Service.ServiceType == ServiceType.GrimReaper);
                 }
             }
 
@@ -112,7 +113,7 @@ namespace SimsVerse.TeethOverhaul
 
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    if (!target.IsHuman || target.SimDescription.IsBonehilda || target.SimDescription.IsMummy || target.IsRobot || Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions)
+                    if (!target.IsHuman || target.SimDescription.IsBonehilda || target.SimDescription.IsMummy || target.IsRobot || target.SimDescription.IsServicePerson && target.Service.ServiceType == ServiceType.GrimReaper || Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions)
                     {
                         return false;
                     }
@@ -155,7 +156,7 @@ namespace SimsVerse.TeethOverhaul
 
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    if (!target.IsHuman || target.SimDescription.IsBonehilda || target.SimDescription.IsMummy || target.IsRobot || !Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions)
+                    if (!target.IsHuman || target.SimDescription.IsBonehilda || target.SimDescription.IsMummy || target.IsRobot || target.SimDescription.IsServicePerson && target.Service.ServiceType == ServiceType.GrimReaper || !Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions)
                     {
                         return false;
                     }
@@ -212,7 +213,7 @@ namespace SimsVerse.TeethOverhaul
 
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return !Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && target.SimDescription.HasCustomTeeth();
+                    return !Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && !(target.SimDescription.IsServicePerson && target.Service.ServiceType == ServiceType.GrimReaper) && target.SimDescription.HasCustomTeeth();
                 }
             }
 
@@ -221,7 +222,7 @@ namespace SimsVerse.TeethOverhaul
             {
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && target.SimDescription.HasCustomTeeth();
+                    return Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && !(target.SimDescription.IsServicePerson && target.Service.ServiceType == ServiceType.GrimReaper) && target.SimDescription.HasCustomTeeth();
                 }
             }
 
