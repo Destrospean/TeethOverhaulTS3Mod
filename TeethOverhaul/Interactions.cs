@@ -46,7 +46,7 @@ namespace SimsVerse.TeethOverhaul
             {
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && !(target.Service != null && target.Service.ServiceType == ServiceType.GrimReaper);
+                    return Sims3.Gameplay.Core.Cheats.sTestingCheatsEnabled && Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && !(target.Service != null && target.Service.ServiceType == ServiceType.GrimReaper);
                 }
             }
 
@@ -156,7 +156,7 @@ namespace SimsVerse.TeethOverhaul
 
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    if (!target.IsHuman || target.SimDescription.IsBonehilda || target.SimDescription.IsMummy || target.IsRobot || target.Service != null && target.Service.ServiceType == ServiceType.GrimReaper || !Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions)
+                    if (!Sims3.Gameplay.Core.Cheats.sTestingCheatsEnabled || !target.IsHuman || target.SimDescription.IsBonehilda || target.SimDescription.IsMummy || target.IsRobot || target.Service != null && target.Service.ServiceType == ServiceType.GrimReaper || !Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions)
                     {
                         return false;
                     }
@@ -222,7 +222,7 @@ namespace SimsVerse.TeethOverhaul
             {
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && !(target.Service != null && target.Service.ServiceType == ServiceType.GrimReaper) && target.SimDescription.HasCustomTeeth();
+                    return Sims3.Gameplay.Core.Cheats.sTestingCheatsEnabled && Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.IsHuman && !target.SimDescription.IsBonehilda && !target.SimDescription.IsMummy && !target.IsRobot && !(target.Service != null && target.Service.ServiceType == ServiceType.GrimReaper) && target.SimDescription.HasCustomTeeth();
                 }
             }
 
