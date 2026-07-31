@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sims3.Gameplay.Actors;
 using Sims3.Gameplay.CAS;
 using Sims3.Gameplay.EventSystem;
@@ -15,6 +16,8 @@ namespace SimsVerse.TeethOverhaul
         static Main()
         {
             ReplaceMethod(typeof(OutfitUtils).GetMethod("SetOutfit", Array.ConvertAll(typeof(Replacements).GetMethod("SetOutfit").GetParameters(), x => x.ParameterType)), typeof(Replacements).GetMethod("SetOutfit"));
+            List<ObjectGuid> preexistingSimObjectIds = new List<ObjectGuid>();
+            List<SimDescription> preexistingSims = new List<SimDescription>();
             EventListener simAgeTransitionListener = null,
             simDescriptionDisposedListener = null,
             simInstantiatedListener = null;
@@ -68,8 +71,17 @@ namespace SimsVerse.TeethOverhaul
                                 if (sim != null)
                                 {
                                     AddInteractions(sim);
+                                    if (!Tuning.kAutoRandomizeTeethOnSimInstantiated)
+                                    {
+                                        return ListenerAction.Keep;
+                                    }
                                     Sims3.SimIFace.CAS.CASPart? teeth;
-                                    if (Tuning.kAutoRandomizeTeethOnSimInstantiated && !sim.SimDescription.TryGetTeeth(out teeth))
+                                    if (preexistingSimObjectIds.Contains(sim.ObjectId))
+                                    {
+                                        preexistingSims.Add(sim.SimDescription);
+                                        preexistingSimObjectIds.Remove(sim.ObjectId);
+                                    }
+                                    else if (!preexistingSims.Contains(sim.SimDescription) && !sim.SimDescription.TryGetTeeth(out teeth))
                                     {
                                         sim.SimDescription.ApplyRandomTeethToAllOutfits();
                                     }
@@ -81,9 +93,9 @@ namespace SimsVerse.TeethOverhaul
                             }
                             return ListenerAction.Keep;
                         });
-                    foreach (SimDescription simDescription in new System.Collections.Generic.List<SimDescription>(TeethUtils.SimTeethMap.Keys))
+                    foreach (SimDescription simDescription in new List<SimDescription>(TeethUtils.SimTeethMap.Keys))
                     {
-                        if (!simDescription.CanHaveTeethApplied())
+                        if (!simDescription.CanHaveTeethApplied() && !simDescription.IsToadified())
                         {
                             simDescription.ResetTeeth();
                         }
@@ -101,11 +113,21 @@ namespace SimsVerse.TeethOverhaul
                     foreach (Sim sim in Sims3.Gameplay.Queries.GetObjects<Sim>())
                     {
                         AddInteractions(sim);
+                        if (sim.SimDescription == null)
+                        {
+                            preexistingSimObjectIds.Add(sim.ObjectId);
+                        }
+                        else
+                        {
+                            preexistingSims.Add(sim.SimDescription);
+                        }
                         sim.ResolveWhetherTeethIsApplied();
                     }
                 };
             World.sOnWorldQuitEventHandler += (sender, e) =>
                 {
+                    preexistingSimObjectIds.Clear();
+                    preexistingSims.Clear();
                     EventTracker.RemoveListener(simAgeTransitionListener);
                     EventTracker.RemoveListener(simDescriptionDisposedListener);
                     EventTracker.RemoveListener(simInstantiatedListener);

@@ -79,13 +79,6 @@ namespace SimsVerse.TeethOverhaul
             simBuilder.PrepareForOutfit(outfit);
             simBuilder.RemoveParts(BodyTypes.Face);
             simBuilder.AddPart(toothlessFaceCASPartKey);
-            foreach (TeethEntry teethEntry in TeethEntries)
-            {
-                if (Array.Exists(outfit.Parts, x => x.Equals(teethEntry.CASPart)))
-                {
-                    simBuilder.RemovePart(teethEntry.CASPart);
-                }
-            }
             simBuilder.AddPart(teeth);
             return new SimOutfit(simBuilder.CacheOutfit(string.Format("ApplyTeethToOutfit_{0}_{1}_{2}", simDescription.SimDescriptionId, outfitCategory, outfitIndex)));
         }
