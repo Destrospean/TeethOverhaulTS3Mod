@@ -36,7 +36,7 @@ namespace SimsVerse.TeethOverhaul
 
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return !Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.SimDescription.CanHaveTeethApplied();
+                    return !Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.SimDescription.CanHaveTeethApplied() && !target.IsToadified();
                 }
             }
 
@@ -45,7 +45,7 @@ namespace SimsVerse.TeethOverhaul
             {
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return Sims3.Gameplay.Core.Cheats.sTestingCheatsEnabled && Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.SimDescription.CanHaveTeethApplied();
+                    return Sims3.Gameplay.Core.Cheats.sTestingCheatsEnabled && Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.SimDescription.CanHaveTeethApplied() && !target.IsToadified();
                 }
             }
 
@@ -112,7 +112,7 @@ namespace SimsVerse.TeethOverhaul
 
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    if (!target.SimDescription.CanHaveTeethApplied() || Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions)
+                    if (Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions || !target.SimDescription.CanHaveTeethApplied() || target.IsToadified())
                     {
                         return false;
                     }
@@ -155,7 +155,7 @@ namespace SimsVerse.TeethOverhaul
 
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    if (!Sims3.Gameplay.Core.Cheats.sTestingCheatsEnabled || !Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions || !target.SimDescription.CanHaveTeethApplied())
+                    if (!Sims3.Gameplay.Core.Cheats.sTestingCheatsEnabled || !Tuning.kInteractionsAreCheats || !Tuning.kShowInteractions || !target.SimDescription.CanHaveTeethApplied() || target.IsToadified())
                     {
                         return false;
                     }

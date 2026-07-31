@@ -95,7 +95,7 @@ namespace SimsVerse.TeethOverhaul
                         });
                     foreach (SimDescription simDescription in new List<SimDescription>(TeethUtils.SimTeethMap.Keys))
                     {
-                        if (!simDescription.CanHaveTeethApplied() && !simDescription.IsToadified())
+                        if (!simDescription.CanHaveTeethApplied())
                         {
                             simDescription.ResetTeeth();
                         }
