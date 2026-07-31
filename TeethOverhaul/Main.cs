@@ -28,7 +28,7 @@ namespace SimsVerse.TeethOverhaul
                                 if (simDescriptionEvent != null)
                                 {
                                     SimDescription simDescription = simDescriptionEvent.SimDescription;
-                                    if (simDescription.YoungAdultOrAbove && simDescription.HasCustomTeeth())
+                                    if (simDescription.YoungAdultOrAbove && simDescription.HasTeethApplied())
                                     {
                                         simDescription.ApplyTeethToAllOutfits(TeethUtils.SimTeethMap[simDescription]);
                                     }
@@ -83,7 +83,7 @@ namespace SimsVerse.TeethOverhaul
                         });
                     foreach (SimDescription simDescription in new System.Collections.Generic.List<SimDescription>(TeethUtils.SimTeethMap.Keys))
                     {
-                        if (!simDescription.IsHuman || simDescription.IsBonehilda || simDescription.IsMummy || simDescription.IsRobot || simDescription.Service != null && simDescription.Service.ServiceType == Sims3.Gameplay.Services.ServiceType.GrimReaper)
+                        if (!simDescription.CanHaveTeethApplied())
                         {
                             simDescription.ResetTeeth();
                         }
@@ -91,7 +91,7 @@ namespace SimsVerse.TeethOverhaul
                         {
                             Sims3.Gameplay.ActorSystems.OccultImaginaryFriend occultImaginaryFriend = (Sims3.Gameplay.ActorSystems.OccultImaginaryFriend)simDescription.OccultManager.GetOccultType(Sims3.UI.Hud.OccultTypes.ImaginaryFriend);
                             Sims3.SimIFace.CAS.CASPart? teeth;
-                            if (occultImaginaryFriend.GetSpecialOutfitIndex() > -1 && simDescription.GetSpecialOutfit(occultImaginaryFriend.GetSpecialOutfitKey()).TryGetTeeth(out teeth))
+                            if (occultImaginaryFriend.HasSpecialOutfit() && simDescription.GetSpecialOutfit(occultImaginaryFriend.GetSpecialOutfitKey()).TryGetTeeth(out teeth))
                             {
                                 simDescription.ResetTeeth();
                                 simDescription.ApplyTeethToAllOutfits(teeth.Value);
@@ -101,7 +101,7 @@ namespace SimsVerse.TeethOverhaul
                     foreach (Sim sim in Sims3.Gameplay.Queries.GetObjects<Sim>())
                     {
                         AddInteractions(sim);
-                        sim.ResolveWhetherSimHasCustomTeeth();
+                        sim.ResolveWhetherTeethIsApplied();
                     }
                 };
             World.sOnWorldQuitEventHandler += (sender, e) =>

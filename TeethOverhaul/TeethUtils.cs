@@ -61,7 +61,7 @@ namespace SimsVerse.TeethOverhaul
 
         public static void ApplyTeethToAllOutfits(this SimDescription simDescription, CASPart teeth)
         {
-            if (simDescription.IsHuman && !simDescription.IsBonehilda && !simDescription.IsMummy && !simDescription.IsRobot && !(simDescription.Service != null && simDescription.Service.ServiceType == Sims3.Gameplay.Services.ServiceType.GrimReaper))
+            if (simDescription.CanHaveTeethApplied())
             {
                 SimTeethMap[simDescription] = teeth;
                 simDescription.ApplyToAllOutfits((simBuilder, outfitCategory, outfitIndex) => simDescription.IsImaginaryFriend && outfitCategory == OutfitCategories.Special && outfitIndex == ((Sims3.Gameplay.ActorSystems.OccultImaginaryFriend)simDescription.OccultManager.GetOccultType(Sims3.UI.Hud.OccultTypes.ImaginaryFriend)).GetSpecialOutfitIndex() ? simDescription.GetOutfit(outfitCategory, outfitIndex) : simDescription.ApplyTeethToOutfit(simBuilder, outfitCategory, outfitIndex, teeth));
@@ -90,6 +90,11 @@ namespace SimsVerse.TeethOverhaul
             return new SimOutfit(simBuilder.CacheOutfit(string.Format("ApplyTeethToOutfit_{0}_{1}_{2}", simDescription.SimDescriptionId, outfitCategory, outfitIndex)));
         }
 
+        public static bool CanHaveTeethApplied(this SimDescription simDescription)
+        {
+            return simDescription.IsHuman && !simDescription.IsBonehilda && !simDescription.IsMummy && !simDescription.IsRobot && !simDescription.IsToadified() && simDescription.Service as Sims3.Gameplay.Services.GrimReaper == null;
+        }
+
         public static string GetFacePartName(this SimBuilder simBuilder)
         {
             return OutfitUtils.GetAgePrefix(simBuilder.Age) + (simBuilder.Age < CASAgeGenderFlags.Teen ? "u" : OutfitUtils.GetGenderPrefix(simBuilder.Gender)) + "Face";
@@ -105,7 +110,7 @@ namespace SimsVerse.TeethOverhaul
             return Array.FindAll(TeethEntries, x => x.CASPart.Key != ResourceKey.kInvalidResourceKey && (x.CASPart.Age & simDescription.Age) != 0 && (x.CASPart.Gender & simDescription.Gender) != 0 && (x.CASPart.Species & simDescription.Species) != 0);
         }
 
-        public static bool HasCustomTeeth(this SimDescription simDescription)
+        public static bool HasTeethApplied(this SimDescription simDescription)
         {
             return SimTeethMap.ContainsKey(simDescription);
         }
@@ -146,6 +151,16 @@ namespace SimsVerse.TeethOverhaul
             return Array.Find(TeethEntries, x => x.CASPart.Equals(teeth)).Default;
         }
 
+        public static bool IsToadified(this Sims3.Gameplay.Actors.Sim sim)
+        {
+            return sim.BuffManager != null && sim.BuffManager.TransformBuff is Sims3.Gameplay.ActorSystems.BuffToadSim;
+        }
+
+        public static bool IsToadified(this SimDescription simDescription)
+        {
+            return simDescription.CreatedSim != null && simDescription.CreatedSim.IsToadified();
+        }
+
         public static void ReapplyTeeth(this SimBuilder simBuilder, SimOutfit outfit)
         {
             CASPart? teeth;
@@ -159,7 +174,7 @@ namespace SimsVerse.TeethOverhaul
 
         public static void ResetTeeth(this SimDescription simDescription, bool simDescriptionIsDisposed = false)
         {
-            if (simDescription.HasCustomTeeth())
+            if (simDescription.HasTeethApplied())
             {
                 SimTeethMap.Remove(simDescription);
             }
@@ -172,7 +187,7 @@ namespace SimsVerse.TeethOverhaul
                 {
                     simBuilder.PrepareForOutfit(simDescription.GetOutfit(outfitCategory, outfitIndex));
                     simBuilder.RemoveParts(BodyTypes.Face);
-                    if (simDescription.IsHuman && !simDescription.IsBonehilda && !(simDescription.IsImaginaryFriend && outfitCategory == OutfitCategories.Special && outfitIndex == ((Sims3.Gameplay.ActorSystems.OccultImaginaryFriend)simDescription.OccultManager.GetOccultType(Sims3.UI.Hud.OccultTypes.ImaginaryFriend)).GetSpecialOutfitIndex()) && !simDescription.IsMummy && !simDescription.IsRobot && !(simDescription.Service != null && simDescription.Service.ServiceType == Sims3.Gameplay.Services.ServiceType.GrimReaper))
+                    if (simDescription.CanHaveTeethApplied() && !(simDescription.IsImaginaryFriend && outfitCategory == OutfitCategories.Special && outfitIndex == ((Sims3.Gameplay.ActorSystems.OccultImaginaryFriend)simDescription.OccultManager.GetOccultType(Sims3.UI.Hud.OccultTypes.ImaginaryFriend)).GetSpecialOutfitIndex()))
                     {
                         simBuilder.AddPart(new ResourceKey(ResourceUtils.HashString64(simDescription.GetFacePartName()), 0x34AEECB, 0));
                     }
@@ -180,15 +195,15 @@ namespace SimsVerse.TeethOverhaul
                 });
         }
 
-        public static void ResolveWhetherSimHasCustomTeeth(this Sims3.Gameplay.Actors.Sim sim)
+        public static void ResolveWhetherTeethIsApplied(this Sims3.Gameplay.Actors.Sim sim)
         {
             if (sim.SimDescription != null)
             {
-                sim.SimDescription.ResolveWhetherSimHasCustomTeeth();
+                sim.SimDescription.ResolveWhetherTeethIsApplied();
             }
         }
 
-        public static void ResolveWhetherSimHasCustomTeeth(this SimDescription simDescription)
+        public static void ResolveWhetherTeethIsApplied(this SimDescription simDescription)
         {
             CASPart? teeth;
             if (simDescription.TryGetTeeth(out teeth))
@@ -213,7 +228,7 @@ namespace SimsVerse.TeethOverhaul
 
         public static bool TryGetTeeth(this SimDescription simDescription, out CASPart? teeth)
         {
-            if (simDescription.HasCustomTeeth())
+            if (simDescription.HasTeethApplied())
             {
                 teeth = SimTeethMap[simDescription];
                 return true;
