@@ -93,6 +93,10 @@ namespace SimsVerse.TeethOverhaul
                             }
                             return ListenerAction.Keep;
                         });
+                    foreach (SimDescription simDescription in SimDescription.GetSimDescriptionsInWorld())
+                    {
+                        simDescription.ResolveWhetherTeethIsApplied();
+                    }
                     foreach (SimDescription simDescription in new List<SimDescription>(TeethUtils.SimTeethMap.Keys))
                     {
                         if (!simDescription.CanHaveTeethApplied())
@@ -121,7 +125,6 @@ namespace SimsVerse.TeethOverhaul
                         {
                             preexistingSims.Add(sim.SimDescription);
                         }
-                        sim.ResolveWhetherTeethIsApplied();
                     }
                 };
             World.sOnWorldQuitEventHandler += (sender, e) =>
