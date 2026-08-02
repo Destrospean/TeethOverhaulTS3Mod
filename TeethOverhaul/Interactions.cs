@@ -212,7 +212,7 @@ namespace SimsVerse.TeethOverhaul
 
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return !Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.SimDescription.HasTeethApplied();
+                    return !Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.SimDescription.HasTeethApplied() && !target.IsToadified();
                 }
             }
 
@@ -221,7 +221,7 @@ namespace SimsVerse.TeethOverhaul
             {
                 public override bool Test(Sim actor, Sim target, bool isAutonomous, ref GreyedOutTooltipCallback greyedOutTooltipCallback)
                 {
-                    return Sims3.Gameplay.Core.Cheats.sTestingCheatsEnabled && Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.SimDescription.HasTeethApplied();
+                    return Sims3.Gameplay.Core.Cheats.sTestingCheatsEnabled && Tuning.kInteractionsAreCheats && Tuning.kShowInteractions && target.SimDescription.HasTeethApplied() && !target.IsToadified();
                 }
             }
 
