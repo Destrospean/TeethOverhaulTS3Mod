@@ -64,7 +64,7 @@ namespace SimsVerse.TeethOverhaul
             if (simDescription.CanHaveTeethApplied())
             {
                 SimTeethMap[simDescription] = teeth;
-                simDescription.ApplyToAllOutfits((simBuilder, outfitCategory, outfitIndex) => simDescription.IsImaginaryFriend && outfitCategory == OutfitCategories.Special && outfitIndex == ((Sims3.Gameplay.ActorSystems.OccultImaginaryFriend)simDescription.OccultManager.GetOccultType(Sims3.UI.Hud.OccultTypes.ImaginaryFriend)).GetSpecialOutfitIndex() ? simDescription.GetOutfit(outfitCategory, outfitIndex) : simDescription.ApplyTeethToOutfit(simBuilder, outfitCategory, outfitIndex, teeth));
+                simDescription.ApplyToAllOutfits((simBuilder, outfitCategory, outfitIndex) => simDescription.IsImaginaryFriend && outfitCategory == OutfitCategories.Special && outfitIndex == ((Sims3.Gameplay.ActorSystems.OccultImaginaryFriend)simDescription.OccultManager.GetOccultType(Sims3.UI.Hud.OccultTypes.ImaginaryFriend)).GetSpecialOutfitIndex() ? null : simDescription.ApplyTeethToOutfit(simBuilder, outfitCategory, outfitIndex, teeth));
             }
         }
 
