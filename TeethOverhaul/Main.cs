@@ -95,6 +95,7 @@ namespace SimsVerse.TeethOverhaul
                         });
                     foreach (SimDescription simDescription in SimDescription.GetSimDescriptionsInWorld())
                     {
+                        preexistingSims.Add(simDescription);
                         simDescription.ResolveWhetherTeethIsApplied();
                     }
                     foreach (SimDescription simDescription in new List<SimDescription>(TeethUtils.SimTeethMap.Keys))
@@ -120,10 +121,6 @@ namespace SimsVerse.TeethOverhaul
                         if (sim.SimDescription == null)
                         {
                             preexistingSimObjectIds.Add(sim.ObjectId);
-                        }
-                        else
-                        {
-                            preexistingSims.Add(sim.SimDescription);
                         }
                     }
                 };
