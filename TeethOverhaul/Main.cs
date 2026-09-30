@@ -38,7 +38,7 @@ namespace SimsVerse.TeethOverhaul
                                     }
                                     else if (Tuning.kAutoRandomizeTeethOnSimAgeTransition && simDescription.TeenOrBelow)
                                     {
-                                        simDescription.CreatedSim.AddAlarm(Tuning.kAutoRandomizeTeethDelay, TimeUnit.Minutes, () => simDescription.ApplyRandomTeethToAllOutfits(), "Apply Random Teeth", AlarmType.DeleteOnReset);
+                                        AlarmManager.Global.AddAlarm(Tuning.kAutoRandomizeTeethDelay, TimeUnit.Minutes, () => simDescription.ApplyRandomTeethToAllOutfits(), "Apply Random Teeth", AlarmType.DeleteOnReset, simDescription);
                                     }
                                 }
                             }
