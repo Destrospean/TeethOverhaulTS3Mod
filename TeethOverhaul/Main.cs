@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sims3.Gameplay.Actors;
 using Sims3.Gameplay.CAS;
 using Sims3.Gameplay.EventSystem;
+using Sims3.Gameplay.Utilities;
 using Sims3.SimIFace;
 using Tuning = Sims3.Gameplay.SimsVerse.TeethOverhaul;
 
@@ -37,7 +38,7 @@ namespace SimsVerse.TeethOverhaul
                                     }
                                     else if (Tuning.kAutoRandomizeTeethOnSimAgeTransition && simDescription.TeenOrBelow)
                                     {
-                                        simDescription.ApplyRandomTeethToAllOutfits();
+                                        simDescription.CreatedSim.AddAlarm(Tuning.kAutoRandomizeTeethDelay, TimeUnit.Minutes, () => simDescription.ApplyRandomTeethToAllOutfits(), "Apply Random Teeth", AlarmType.DeleteOnReset);
                                     }
                                 }
                             }
@@ -83,7 +84,7 @@ namespace SimsVerse.TeethOverhaul
                                     }
                                     else if (!preexistingSims.Contains(sim.SimDescription) && !sim.SimDescription.TryGetTeeth(out teeth))
                                     {
-                                        sim.SimDescription.ApplyRandomTeethToAllOutfits();
+                                        sim.AddAlarm(Tuning.kAutoRandomizeTeethDelay, TimeUnit.Minutes, () => sim.SimDescription.ApplyRandomTeethToAllOutfits(), "Apply Random Teeth", AlarmType.DeleteOnReset);
                                     }
                                 }
                             }
