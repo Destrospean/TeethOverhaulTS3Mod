@@ -52,10 +52,10 @@ namespace SimsVerse.TeethOverhaul
                         {
                             try
                             {
-                                Sim sim = evt.TargetObject as Sim;
-                                if (sim != null)
+                                SimDescriptionEvent simDescriptionEvent = evt as SimDescriptionEvent;
+                                if (simDescriptionEvent != null)
                                 {
-                                    sim.SimDescription.ResetTeeth(true);
+                                    simDescriptionEvent.SimDescription.ResetTeeth(true);
                                 }
                             }
                             catch (Exception ex)
