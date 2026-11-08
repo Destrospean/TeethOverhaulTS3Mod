@@ -127,6 +127,7 @@ namespace SimsVerse.TeethOverhaul
                 };
             World.sOnWorldQuitEventHandler += (sender, e) =>
                 {
+                    TeethUtils.SimTeethMap.Clear();
                     preexistingSimObjectIds.Clear();
                     preexistingSims.Clear();
                     EventTracker.RemoveListener(simAgeTransitionListener);
